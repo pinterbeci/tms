@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class TMSAnnotationProcessor {
+
     public static void initiateTMSIdField(final Object object) {
         Class<?> clazz = object.getClass();
         while (Objects.nonNull(clazz)) {
@@ -13,9 +14,10 @@ public class TMSAnnotationProcessor {
                 if (field.isAnnotationPresent(TMSId.class)) {
                     try {
                         field.setAccessible(true);
-                        if (Objects.isNull(field.get(object))) {
-                            field.set(object, UUID.randomUUID().toString());
+                        if (Objects.nonNull(field.get(object))) {
+                            return;
                         }
+                        field.set(object, UUID.randomUUID().toString());
                     } catch (final IllegalAccessException exception) {
                         exception.printStackTrace();
                     }
