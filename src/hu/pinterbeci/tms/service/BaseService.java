@@ -1,12 +1,12 @@
 package hu.pinterbeci.tms.service;
 
+import hu.pinterbeci.tms.model.BaseModel;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import hu.pinterbeci.tms.model.BaseModel;
 
 public abstract class BaseService<S extends BaseModel> {
 
