@@ -10,6 +10,7 @@ public abstract class BaseModel {
     @TMSId
     private String id;
 
+    // todo a két localdatetime megfelelő műveletek után kapjon értékét
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModification;

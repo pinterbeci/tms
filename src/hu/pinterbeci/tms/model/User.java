@@ -5,11 +5,12 @@ import hu.pinterbeci.tms.enums.Role;
 
 @ConstructNewTMSInstance
 public class User extends BaseModel {
-
+    // todo
+    // pakoljunk ra egy annotaciot, ami egyediseget vizsgal
     private String name;
 
     //todo
-    // validáció
+    // validáció legyen ennek is egy annotacioja
     private String email;
 
     private Role role;
