@@ -5,7 +5,6 @@ import hu.pinterbeci.tms.enums.Role;
 import hu.pinterbeci.tms.errors.TMSException;
 import hu.pinterbeci.tms.model.BaseModel;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
@@ -37,27 +36,27 @@ public class TMSReflectionCallService<E extends BaseModel, S extends BaseService
                 }
                 clazz = clazz.getSuperclass();
             }
-
-        } catch (final Exception exception) {
-            final TMSException methodInvokeError = new TMSException("Exception occurred during method invoke!", "METHOD_INVOKE_ERROR", exception);
-            methodInvokeError.printTMSException();
             return null;
+        } catch (final Exception exception) {
+            throw new TMSException("Exception occurred during method invoke!", "METHOD_INVOKE_ERROR", exception);
         }
-        return null;
     }
 
-    private Object methodInvokeWithTSMRole(final Method method, final Object[] params, final Role callerRole) throws InvocationTargetException, IllegalAccessException {
-        final TMSAllowedRoles allowedRoles = method.getAnnotation(TMSAllowedRoles.class);
-        if (Objects.isNull(allowedRoles)) {
-            throw new RuntimeException();
+    private Object methodInvokeWithTSMRole(final Method method, final Object[] params, final Role callerRole) {
+        try {
+            final TMSAllowedRoles allowedRoles = method.getAnnotation(TMSAllowedRoles.class);
+            if (Objects.isNull(allowedRoles)) {
+                throw new TMSException("Method " + method.getName() + " is not annotated with @TMSAllowedRoles");
+            }
+
+            final boolean hasRoleToCallMethod = Arrays.stream(allowedRoles.value()).anyMatch(role -> Objects.equals(role.name(), callerRole.name()));
+
+            if (!hasRoleToCallMethod) {
+                throw new TMSException("The User has not role to call the method!");
+            }
+            return method.invoke(serviceInstance, params);
+        } catch (final Exception exception) {
+            throw new TMSException("Exception occurred during method invoke!", "METHOD_INVOKE_ERROR", exception);
         }
-
-        final boolean hasRoleToCallMethod = Arrays.stream(allowedRoles.value()).anyMatch(role -> Objects.equals(role.name(), callerRole.name()));
-
-        if (!hasRoleToCallMethod) {
-            throw new RuntimeException();
-        }
-        return method.invoke(serviceInstance, params);
-
     }
 }

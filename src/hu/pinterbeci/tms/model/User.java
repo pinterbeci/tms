@@ -25,8 +25,9 @@ public class User extends BaseModel {
     }
 
     public void setEmail(final String email) {
-        TMSValidatorUtil.validateEmailSetter(email);
-        this.email = email;
+        if (TMSValidatorUtil.validateEmailSetter(email)) {
+            this.email = email;
+        }
     }
 
     public Role getRole() {

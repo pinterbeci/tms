@@ -27,9 +27,7 @@ public class TMSModelAnnotationProcessor {
                         field.set(object, UUID.randomUUID().toString());
                     }
                 } catch (final Exception exception) {
-                    final TMSException invalidFieldInvoke =
-                            new TMSException(field.getName() + " field invoke during reflection, thrown exception", "INVALID_FIELD_INVOKE", exception);
-                    invalidFieldInvoke.printTMSException();
+                    throw new TMSException(field.getName() + " field invoke during reflection, thrown exception", "INVALID_FIELD_INVOKE", exception);
                 }
             });
             clazz = clazz.getSuperclass();
@@ -45,9 +43,8 @@ public class TMSModelAnnotationProcessor {
                     try {
                         clazz.getDeclaredConstructors()[0].newInstance();
                     } catch (final Exception exception) {
-                        final TMSException invalidConstructorReflection =
-                                new TMSException(clazz + " instance initialization during reflection, thrown an exception", "INVALID_CONSTRUCTOR_INVOKE", exception);
-                        invalidConstructorReflection.printTMSException();
+                        throw new TMSException(clazz + " instance initialization during reflection, thrown an exception", "INVALID_CONSTRUCTOR_INVOKE", exception);
+
                     }
                 });
     }

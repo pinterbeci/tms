@@ -1,20 +1,20 @@
 package hu.pinterbeci.tms.errors;
 
-public class TMSException extends Exception {
+public class TMSException extends RuntimeException {
 
     private final String errorCode;
 
-    public TMSException(String message) {
+    public TMSException(final String message) {
         super(message);
         this.errorCode = "UNKNOWN_ERROR";
     }
 
-    public TMSException(String message, String errorCode) {
+    public TMSException(final String message, final String errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public TMSException(String message, String errorCode, Throwable cause) {
+    public TMSException(final String message, final String errorCode, final Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
     }
@@ -23,14 +23,8 @@ public class TMSException extends Exception {
         return errorCode;
     }
 
-    public void printTMSException() {
-        System.err.println("Error occurred: " + this.getMessage());
-        System.err.println("Error Code: " + this.getErrorCode());
-        System.err.println("Error Cause: " + this.getCause());
-    }
-
     @Override
     public String toString() {
-        return String.format("TMSException{errorCode='%s', message='%s'}", errorCode, getMessage());
+        return String.format("TMSException {errorCode='%s', message='%s', cause='%s'}", getErrorCode(), getMessage(), getCause());
     }
 }

@@ -3,6 +3,7 @@ package hu.pinterbeci.tms.model;
 import hu.pinterbeci.tms.annotations.ConstructNewTMSInstance;
 import hu.pinterbeci.tms.enums.Priority;
 import hu.pinterbeci.tms.enums.Status;
+import hu.pinterbeci.tms.validate.TMSValidatorUtil;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,7 @@ public class Task extends BaseModel {
 
     public Task() {
         this.status = Status.NOT_STARTED;
+        this.setCreatedDate(LocalDateTime.now());
     }
 
     public String getTitle() {
@@ -30,7 +32,9 @@ public class Task extends BaseModel {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        if (TMSValidatorUtil.validateTaskTitle(title)) {
+            this.title = title;
+        }
     }
 
     public String getDescription() {

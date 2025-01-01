@@ -36,14 +36,10 @@ public class TaskService extends BaseService<Task> {
     @TMSAllowedRoles({Role.ADMIN})
     protected void assignTask(final String id, final User user) {
         if (Objects.isNull(id)) {
-            final TMSException invalidTaskAssign = new TMSException("Task is is null! Assign is not possible!", "INVALID_TASK_ASSIGN");
-            invalidTaskAssign.printTMSException();
-            return;
+            throw new TMSException("Task is is null! Assign is not possible!", "INVALID_TASK_ASSIGN");
         }
         if (Objects.isNull(user)) {
-            final TMSException invalidTaskAssignToUser = new TMSException("User is null, cannot assign task to them!", "INVALID_TASK_ASSIGN_TO_USER");
-            invalidTaskAssignToUser.printTMSException();
-            return;
+            throw new TMSException("User is null, cannot assign task to them!", "INVALID_TASK_ASSIGN_TO_USER");
         }
 
         findById(id).ifPresent(task -> {
@@ -131,13 +127,10 @@ public class TaskService extends BaseService<Task> {
 
     private void userRoleAppropriateCheck(final User user, final Role necessaryRole) {
         if (Objects.isNull(user)) {
-            final TMSException invalidTaskAssignToUser = new TMSException("User is null, cannot assign task to them!", "INVALID_TASK_ASSIGN_TO_USER");
-            invalidTaskAssignToUser.printTMSException();
-            return;
+            throw new TMSException("User is null, cannot assign task to them!", "INVALID_TASK_ASSIGN_TO_USER");
         }
         if (!Objects.equals(user.getRole(), necessaryRole)) {
-            final TMSException invalidTaskAssignToUser = new TMSException("The Role of the assigned user is not appropriate!", "INVALID_TASK_ASSIGN_TO_USER");
-            invalidTaskAssignToUser.printTMSException();
+            throw new TMSException("The Role of the assigned user is not appropriate!", "INVALID_TASK_ASSIGN_TO_USER");
         }
     }
 

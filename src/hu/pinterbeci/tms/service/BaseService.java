@@ -36,17 +36,13 @@ public abstract class BaseService<S extends BaseModel> {
     @TMSAllowedRoles({Role.ADMIN})
     protected S create(final S newModel) {
         if (Objects.isNull(newModel)) {
-            final TMSException modelIsNull = new TMSException("New model creating is not possible, because of the model instance if null",
+            throw new TMSException("New model creating is not possible, because of the model instance if null",
                     "NEW_MODEL_IS_NULL");
-            modelIsNull.printTMSException();
-            return null;
         }
         if (Objects.nonNull(newModel.getId())) {
             findById(newModel.getId()).ifPresent(model -> {
-                final TMSException modelIsExists =
-                        new TMSException("The model creation is not possible, because the model is exists with this id =" + newModel.getId(),
-                                "MODEL_IS_EXISTS");
-                modelIsExists.printTMSException();
+                throw new TMSException("The model creation is not possible, because the model is exists with this id =" + newModel.getId(),
+                        "MODEL_IS_EXISTS");
             });
             return null;
         }
@@ -59,9 +55,7 @@ public abstract class BaseService<S extends BaseModel> {
         final S savedModel = findById(id).orElse(null);
 
         if (Objects.isNull(savedModel)) {
-            final TMSException modelIsNull = new TMSException("The model updating is not possible, because of null value", "NEW_MODEL_IS_NULL");
-            modelIsNull.printTMSException();
-            return null;
+            throw new TMSException("The model updating is not possible, because of null value", "NEW_MODEL_IS_NULL");
         }
 
         Arrays.stream(model.getClass().getDeclaredFields()).forEach(field -> {
@@ -74,9 +68,8 @@ public abstract class BaseService<S extends BaseModel> {
                     field.set(savedModel, value);
                 }
             } catch (final Exception exception) {
-                final TMSException invalidModelUpdate = new TMSException("Model update with reflection is thrown exception. Model id = " + id,
+                throw new TMSException("Model update with reflection is thrown exception. Model id = " + id,
                         "INVALID_MODEL_UPDATE", exception);
-                invalidModelUpdate.printTMSException();
             }
         });
         fillTaskHistoryData(savedModel);
@@ -87,10 +80,8 @@ public abstract class BaseService<S extends BaseModel> {
     protected void delete(final String id) {
         final S savedModel = findById(id).orElse(null);
         if (Objects.isNull(savedModel)) {
-            final TMSException invalidSoftDeleteModel =
-                    new TMSException("The model deletion is not possible, because of the model is not exists!", "INVALID_SOFT_DELETE_MODEL");
-            invalidSoftDeleteModel.printTMSException();
-            return;
+            throw new TMSException("The model deletion is not possible, because of the model is not exists!", "INVALID_SOFT_DELETE_MODEL");
+
         }
         savedModel.setDeleted(true);
         savedModel.setHistoryStatus(HistoryStatus.DELETING);
@@ -113,11 +104,8 @@ public abstract class BaseService<S extends BaseModel> {
     @TMSAllowedRoles({Role.ADMIN})
     protected S saveNewItem(final S model) {
         if (Objects.nonNull(model.getId())) {
-            final TMSException modelIsExists =
-                    new TMSException("Saving the model is not possible, because the model with this id is exists, the id =" + model.getId(),
-                            "MODEL_IS_EXISTS");
-            modelIsExists.printTMSException();
-            return null;
+            throw new TMSException("Saving the model is not possible, because the model with this id is exists, the id =" + model.getId(),
+                    "MODEL_IS_EXISTS");
         }
         model.setHistoryStatus(HistoryStatus.CREATING);
         this.modelDataHolder.add(model);

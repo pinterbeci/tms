@@ -14,6 +14,9 @@ import java.util.Optional;
 
 public class AuthenticationService {
 
+    /* todo:
+       kivetelkezeles, inner class, nested class
+     */
     private static AuthenticationService instance;
 
     private final List<AuthenticatedUser> authenticatedUsers;
@@ -37,15 +40,18 @@ public class AuthenticationService {
     }
 
     protected boolean authenticateUserByAndPW(final String username, final String password) {
-        if (Objects.isNull(username))
-            return false;
-        if (Objects.isNull(password))
-            return false;
+        if (Objects.isNull(username)) {
+            throw new TMSException("Error occurred during user authentication: username is null!");
+        }
+        if (Objects.isNull(password)) {
+            throw new TMSException("Error occurred during user authentication: password is null!");
+        }
 
         final User userByName = this.userService.findByName(username).orElse(null);
 
-        if (Objects.isNull(userByName))
-            return false;
+        if (Objects.isNull(userByName)) {
+            throw new TMSException("Error occurred during user authentication: user data not found!");
+        }
 
         final AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setRole(userByName.getRole());
@@ -70,7 +76,7 @@ public class AuthenticationService {
 
     protected boolean isAuthenticatedUserByName(final String userName) {
         if (Objects.isNull(userName)) {
-            throw new RuntimeException();
+            throw new TMSException("Error occurred during authentication check by username: username is null!");
         }
         return Objects.isNull(
                 getByAuthenticatedUsername(userName)
@@ -85,12 +91,9 @@ public class AuthenticationService {
             digest.digest(salt);
             return digest.digest(passwordStr.getBytes(StandardCharsets.UTF_8));
         } catch (final Exception exception) {
-            final TMSException invalidPasswordHash =
-                    new TMSException("Password hash method not successfully and thrown an exception",
-                            "INVALID_PASSWORD_HASH",
-                            exception);
-            invalidPasswordHash.printTMSException();
-            return null;
+            throw new TMSException("Password hash method not successfully and thrown an exception",
+                    "INVALID_PASSWORD_HASH",
+                    exception);
         }
     }
 

@@ -30,27 +30,20 @@ public class UserService extends BaseService<User> {
     @Override
     protected User create(final User newUser) {
         if (Objects.isNull(newUser)) {
-            final TMSException modelIsNull = new TMSException("New model creating is not possible, because of the model instance if null",
-                    "NEW_MODEL_IS_NULL");
-            modelIsNull.printTMSException();
-            return null;
+            throw new TMSException("New model creating is not possible, because of the model instance if null", "NEW_MODEL_IS_NULL");
         }
         final boolean userNameAlreadyHave = getAll().stream()
                 .anyMatch(user -> Objects.equals(user.getName(), newUser.getName()));
 
         if (userNameAlreadyHave) {
-            final TMSException existWithUsername = new TMSException("The User is exits with this username. The username = " + newUser.getName(), "USER_IS_EXIST_WITH_USERNAME");
-            existWithUsername.printTMSException();
-            return null;
+            throw new TMSException("The User is exits with this username. The username = " + newUser.getName(), "USER_IS_EXIST_WITH_USERNAME");
         }
 
         final boolean userEmailAlreadyHave = getAll().stream()
                 .anyMatch(user -> Objects.equals(user.getEmail(), newUser.getEmail()));
 
         if (userEmailAlreadyHave) {
-            final TMSException existWithEmail = new TMSException("The User is exits with this e-mail. The username = " + newUser.getEmail(), "USER_IS_EXIST_WITH_EMAIL");
-            existWithEmail.printTMSException();
-            return null;
+            throw new TMSException("The User is exits with this e-mail. The username = " + newUser.getEmail(), "USER_IS_EXIST_WITH_EMAIL");
         }
         newUser.setCreatedDate(LocalDateTime.now());
         return saveNewItem(newUser);
@@ -59,18 +52,19 @@ public class UserService extends BaseService<User> {
     @TMSAllowedRoles({Role.ADMIN})
     protected void assignRole(final String assignorId, final String assignedId, final Role role) {
         if (Objects.isNull(assignorId)) {
-            throw new RuntimeException();
+            throw new TMSException("During assigning user role operation error occurred: the 'assignorId' is null!", "ASSIGNOR_ID_IS_NULL");
         }
         if (Objects.isNull(assignedId)) {
-            throw new RuntimeException();
+            throw new TMSException("During assigning user role operation error occurred: the 'assignedId' is null!", "ASSIGNED_ID_IS_NULL");
         }
         if (Objects.isNull(role)) {
-            throw new RuntimeException();
+            throw new TMSException("During assigning user role operation error occurred: the 'ROLE' is require!", "ROLE_NULL");
         }
 
         findById(assignorId).ifPresent(user -> {
             if (!Objects.equals(user.getRole(), Role.ADMIN)) {
-                throw new RuntimeException();
+                throw new TMSException("During assigning user role operation error occurred:" +
+                        " assignor is not eligible to assigning role! assignorId = " + assignedId);
             }
         });
         findById(assignedId).ifPresent(user -> {
