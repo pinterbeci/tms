@@ -14,9 +14,6 @@ import java.util.Optional;
 
 public class AuthenticationService {
 
-    /* todo:
-       kivetelkezeles, inner class, nested class
-     */
     private static AuthenticationService instance;
 
     private final List<AuthenticatedUser> authenticatedUsers;
