@@ -1,10 +1,10 @@
 package hu.pinterbeci.tms.model;
 
-import java.time.LocalDateTime;
-
 import hu.pinterbeci.tms.annotations.ConstructNewTMSInstance;
 import hu.pinterbeci.tms.enums.Priority;
 import hu.pinterbeci.tms.enums.Status;
+
+import java.time.LocalDateTime;
 
 @ConstructNewTMSInstance
 public class Task extends BaseModel {
@@ -17,7 +17,6 @@ public class Task extends BaseModel {
 
     private LocalDateTime dueDate;
 
-    //ha in progress --> akkor kapja meg a feladatot, ha ez a személy elkészíti a feladatot, akkor assign-olja az adminnak vissza a taskot
     private User assignedUser;
 
     private Status status;

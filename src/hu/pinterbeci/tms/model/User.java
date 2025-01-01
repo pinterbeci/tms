@@ -2,15 +2,12 @@ package hu.pinterbeci.tms.model;
 
 import hu.pinterbeci.tms.annotations.ConstructNewTMSInstance;
 import hu.pinterbeci.tms.enums.Role;
+import hu.pinterbeci.tms.validate.TMSValidatorUtil;
 
 @ConstructNewTMSInstance
 public class User extends BaseModel {
-    // todo
-    // pakoljunk ra egy annotaciot, ami egyediseget vizsgal
     private String name;
 
-    //todo
-    // validáció legyen ennek is egy annotacioja
     private String email;
 
     private Role role;
@@ -19,7 +16,7 @@ public class User extends BaseModel {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -27,7 +24,8 @@ public class User extends BaseModel {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
+        TMSValidatorUtil.validateEmailSetter(email);
         this.email = email;
     }
 
