@@ -33,7 +33,6 @@ public final class TMSValidatorUtil {
         if (taskTitle.length() < 10) {
             throw new TMSException("The task title length is less than 10 character!", "INVALID_TASK_TITLE_LENGTH");
         }
-
         return true;
     }
 }

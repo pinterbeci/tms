@@ -49,10 +49,10 @@ public class TMSReflectionCallService<E extends BaseModel, S extends BaseService
                 throw new TMSException("Method " + method.getName() + " is not annotated with @TMSAllowedRoles");
             }
 
-            final boolean hasRoleToCallMethod = Arrays.stream(allowedRoles.value()).anyMatch(role -> Objects.equals(role.name(), callerRole.name()));
-
+            final boolean hasRoleToCallMethod = Arrays.stream(allowedRoles.value())
+                    .anyMatch(role -> Objects.equals(role.name(), callerRole.name()));
             if (!hasRoleToCallMethod) {
-                throw new TMSException("The User has not role to call the method!");
+                throw new TMSException("The User has no permission to call the method!");
             }
             return method.invoke(serviceInstance, params);
         } catch (final Exception exception) {
