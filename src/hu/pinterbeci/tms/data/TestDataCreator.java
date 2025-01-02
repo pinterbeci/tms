@@ -73,7 +73,15 @@ public final class TestDataCreator {
 
         static final List<Priority> PRIORITY_LIST = List.of(Priority.LOW, Priority.MEDIUM, Priority.HIGH);
 
-        static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        static final String UPPER_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        static final String LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+
+        static final String DIGITS = "0123456789";
+
+        static final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+
+        static final String ALPHABET = LOWER_CASE_LETTERS + UPPER_CASE_LETTERS;
 
         static final Random RANDOM = new Random();
 
@@ -95,22 +103,18 @@ public final class TestDataCreator {
         }
 
         static String generateRandomPassword() {
-            final String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            final String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
-            final String digits = "0123456789";
-            final String specialCharacters = "!@#$%^&*()-_=+[]{}|;:,.<>?";
             stringBuilder = new StringBuilder();
-            final String allCharacters = stringBuilder.append(upperCaseLetters)
-                    .append(lowerCaseLetters)
-                    .append(digits)
-                    .append(specialCharacters)
+            final String allCharacters = stringBuilder.append(UPPER_CASE_LETTERS)
+                    .append(LOWER_CASE_LETTERS)
+                    .append(DIGITS)
+                    .append(SPECIAL_CHARACTERS)
                     .toString();
 
             stringBuilder = new StringBuilder();
-            stringBuilder.append(upperCaseLetters.charAt(RANDOM.nextInt(upperCaseLetters.length())));
-            stringBuilder.append(lowerCaseLetters.charAt(RANDOM.nextInt(lowerCaseLetters.length())));
-            stringBuilder.append(digits.charAt(RANDOM.nextInt(digits.length())));
-            stringBuilder.append(specialCharacters.charAt(RANDOM.nextInt(specialCharacters.length())));
+            stringBuilder.append(UPPER_CASE_LETTERS.charAt(RANDOM.nextInt(UPPER_CASE_LETTERS.length())));
+            stringBuilder.append(LOWER_CASE_LETTERS.charAt(RANDOM.nextInt(LOWER_CASE_LETTERS.length())));
+            stringBuilder.append(DIGITS.charAt(RANDOM.nextInt(DIGITS.length())));
+            stringBuilder.append(SPECIAL_CHARACTERS.charAt(RANDOM.nextInt(SPECIAL_CHARACTERS.length())));
 
             for (int i = 4; i < 10; i++) {
                 stringBuilder.append(allCharacters.charAt(RANDOM.nextInt(allCharacters.length())));
