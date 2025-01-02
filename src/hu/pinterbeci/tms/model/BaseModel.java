@@ -24,6 +24,7 @@ public abstract class BaseModel {
         TMSModelAnnotationProcessor.constructNewInstance(this);
         TMSModelAnnotationProcessor.initiateTMSIdField(this);
         this.setHistoryStatus(HistoryStatus.CREATING);
+        this.setCreatedDate(LocalDateTime.now());
     }
 
     public String getId() {
