@@ -1,11 +1,11 @@
 package hu.pinterbeci.tms.model;
 
-public class AuthenticatedUser extends User{
+import hu.pinterbeci.tms.annotations.ConstructNewTMSInstance;
 
-    private byte [] hashedPassword;
+@ConstructNewTMSInstance
+public class AuthenticatedUser extends User {
 
-    public AuthenticatedUser() {
-    }
+    private byte[] hashedPassword;
 
     public byte[] getHashedPassword() {
         return hashedPassword;
