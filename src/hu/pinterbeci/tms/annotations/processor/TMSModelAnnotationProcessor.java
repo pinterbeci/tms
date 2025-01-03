@@ -44,7 +44,6 @@ public class TMSModelAnnotationProcessor {
                         clazz.getDeclaredConstructors()[0].newInstance();
                     } catch (final Exception exception) {
                         throw new TMSException(clazz + " instance initialization during reflection, thrown an exception", "INVALID_CONSTRUCTOR_INVOKE", exception);
-
                     }
                 });
     }
