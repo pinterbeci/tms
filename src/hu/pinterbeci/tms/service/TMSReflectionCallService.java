@@ -6,7 +6,10 @@ import hu.pinterbeci.tms.errors.TMSException;
 import hu.pinterbeci.tms.model.BaseModel;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,7 +20,19 @@ public class TMSReflectionCallService<E extends BaseModel, S extends BaseService
         this.serviceInstance = service;
     }
 
-    public Object invoke(final String methodName, final Object[] params, final Role callerRole) {
+    public <R> R invoke(final String methodName, final Object[] params, final Role callerRole, Class<R> returnTypeClass) {
+        final Object returnObject = invoke(methodName, params, callerRole);
+        if (Objects.isNull(returnObject)) {
+            throw new TMSException("Exception occurred during method invocation: " + methodName + ", return is null!");
+        }
+
+        if (!returnTypeClass.isInstance(returnObject)) {
+            throw new TMSException("Exception occurred during method invocation: " + methodName + ", return type does not match with given" + returnTypeClass.getName());
+        }
+        return returnTypeClass.cast(returnObject);
+    }
+
+    private Object invoke(final String methodName, final Object[] params, final Role callerRole) {
         return invokeServiceMethod(methodName, params, callerRole);
     }
 

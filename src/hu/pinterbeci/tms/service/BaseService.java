@@ -46,7 +46,6 @@ public abstract class BaseService<S extends BaseModel> {
             });
             return null;
         }
-        newModel.setCreatedDate(LocalDateTime.now());
         return saveNewItem(newModel);
     }
 
@@ -89,7 +88,7 @@ public abstract class BaseService<S extends BaseModel> {
     }
 
     @TMSAllowedRoles({Role.ADMIN, Role.DEVELOPER, Role.TASK_VIEWER, Role.REGULAR_USER})
-    protected List<S> getAll() {
+    public List<S> getAll() {
         return this.modelDataHolder.stream()
                 .filter(item -> !item.isDeleted())
                 .toList();
@@ -103,7 +102,8 @@ public abstract class BaseService<S extends BaseModel> {
 
     @TMSAllowedRoles({Role.ADMIN})
     protected S saveNewItem(final S model) {
-        if (Objects.nonNull(model.getId())) {
+        final S savedItem = findById(model.getId()).orElse(null);
+        if (Objects.nonNull(savedItem)) {
             throw new TMSException("Saving the model is not possible, because the model with this id is exists, the id =" + model.getId(),
                     "MODEL_IS_EXISTS");
         }
@@ -111,6 +111,18 @@ public abstract class BaseService<S extends BaseModel> {
         this.modelDataHolder.add(model);
         fillTaskHistoryData(model);
         return model;
+    }
+
+    @TMSAllowedRoles({Role.ADMIN})
+    public boolean saveNewItemList(final List<S> itemList) {
+        if (Objects.isNull(itemList)) {
+            throw new TMSException("Saving new item list is not possible, because the itemList is null!");
+        }
+        if (itemList.isEmpty()) {
+            throw new TMSException("Saving new item list is not possible, because of itemList is empty!");
+        }
+        itemList.forEach(this::saveNewItem);
+        return true;
     }
 
     protected void fillTaskHistoryData(final S model) {

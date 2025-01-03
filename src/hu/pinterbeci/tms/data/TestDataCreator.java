@@ -22,6 +22,8 @@ public final class TestDataCreator {
     public static void generateTestData() {
         DataFill.fillTestUsers();
         DataFill.fillTestTasks();
+        final TMSDataHolder tmsDataHolder = new TMSDataHolder();
+        tmsDataHolder.testSaveData(DataFill.testUsers, DataFill.testTasks);
     }
 
     static class DataFill {

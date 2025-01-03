@@ -37,4 +37,9 @@ public class User extends BaseModel {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "USER: 'ID' = " + getId() + "; 'USERNAME' = " + getName() + "; 'EMAIL' = " + getEmail() + "; 'ROLE' = " + getRole();
+    }
 }
